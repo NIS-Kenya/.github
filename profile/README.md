@@ -1,7 +1,7 @@
 <div align="center">
 
-# **THE NATION'S INFORMATION STATION Kenya**
+# **THE NATION'S INFORMATION STATION **
 
-### THE NIS
+### THE NIS Kenya
 
 </div>
