@@ -10,7 +10,12 @@
 <img src="https://democracyinafrica.org/wp-content/uploads/2024/07/Designer.jpeg" alt="Logo of National Integrity Society" width="350"/>
 
 </div>
+<div align="center">
+
 # Join Our Organization
+
+</div>
+
 
 Click the button below to join our organization:
 
