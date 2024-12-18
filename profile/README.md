@@ -12,8 +12,10 @@
 </div>
 # Join Our Organization
 
-Click the button below or scan the QR code to join our organization:
+Click the button below to join our organization:
 
 [![Join Now](https://github.com/franfreezy/your-repo/gh-pages/button.png)](https://your-username.github.io/your-repo/)
+
+Scan the QR code to join our organization:
 
 ![QR Code](https://github.com/franfreezy/your-repo/gh-pages/qrcode.png)
