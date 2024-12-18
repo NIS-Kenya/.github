@@ -1,0 +1,65 @@
+name: Invite to Organization
+
+on:
+  repository_dispatch:
+    types: [join_organization]
+
+jobs:
+  invite:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Get user information
+      id: user-info
+      run: echo "Join event triggered"
+
+    - name: Invite user to organization
+      id: invite-user
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ORG_NAME: your-organization-name
+      run: |
+        response=$(curl -s -o response.txt -w "%{http_code}" -X PUT -H "Authorization: token $GITHUB_TOKEN" \
+        -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/orgs/$ORG_NAME/memberships/${{ github.actor }})
+        if [ "$response" -ne 200 ]; then
+          echo "Error inviting user to organization"
+          exit 1
+        fi
+      continue-on-error: true
+
+    - name: Get user email
+      id: get-email
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        email=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+        https://api.github.com/users/${{ github.actor }} | jq -r '.email')
+        if [ "$email" == "null" ]; then
+          email="user@example.com"
+        fi
+        echo "::set-output name=email::$email"
+
+    - name: Send validation email
+      if: success() && steps.invite-user.outcome == 'success'
+      env:
+        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        EMAIL: ${{ steps.get-email.outputs.email }}
+        USERNAME: ${{ github.actor }}
+        VALIDATION_LINK: https://yourdomain.com/validate?user=${{ github.actor }}
+      run: |
+        curl -X POST -H "Authorization: Bearer $SENDGRID_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{
+          "personalizations": [{
+            "to": [{"email": "'"$EMAIL"'"}],
+            "subject": "Validate Your Invitation to Join the Organization"
+          }],
+          "from": {"email": "noreply@yourdomain.com"},
+          "content": [{
+            "type": "text/plain",
+            "value": "Hello $USERNAME, please validate your invitation to join the organization by clicking this link: $VALIDATION_LINK"
+          }]
+        }' https://api.sendgrid.com/v3/mail/send
