@@ -7,12 +7,12 @@
 </div>
 <div align="center">
 
-<img src="https://democracyinafrica.org/wp-content/uploads/2024/07/Designer.jpeg" alt="Logo of National Integrity Society" width="350"/>
+<img src="https://democracyinafrica.org/wp-content/uploads/2024/07/Designer.jpeg" alt="Logo of National Integrity Society" width="250"/>
 
 </div>
 <div align="center">
 
-# Join Our Organization
+## Join Our Organization
 
 </div>
 
