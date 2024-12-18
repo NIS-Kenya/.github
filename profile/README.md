@@ -1,6 +1,6 @@
 <div align="center">
 
-# THE NATION'S INFORMATION STATION 
+# THE THE NATIONAL INTEGRITY SOCIETY
 
 ### THE NIS Kenya
 
