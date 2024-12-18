@@ -12,10 +12,10 @@
 </div>
 
 
-<div style="text-align: center;">
-  <span style="display: inline-block; padding: 10px; font-size: 2em; font-weight: bold; background: linear-gradient(to bottom, black 25%, white 25%, white 30%, red 30%, red 55%, white 55%, white 60%, green 60%); color: transparent; -webkit-background-clip: text; background-clip: text;">
-    Join Our Organization
-  </span>
+<div align="center">
+
+  ###  Join Our Organization
+  
 </div>
 
 
