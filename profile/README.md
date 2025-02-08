@@ -6,12 +6,16 @@
 
 <img src="https://democracyinafrica.org/wp-content/uploads/2024/07/Designer.jpeg" alt="Logo of National Integrity Society" width="250"/>
 
-### Scan to Join Our Organization
+### Join Our Organization
+
+Scan the QR code or click the button below to request membership:
 
 <div id="qrcode">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://github.com/THE-NIS-KENYA" alt="QR Code to join THE NIS Kenya"/>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://the-nis-kenya.github.io/.github/profile/index.html" alt="QR Code to join THE NIS Kenya"/>
 </div>
 
-[Click here to join directly](https://github.com/THE-NIS-KENYA)
+<br>
+
+<a href="https://the-nis-kenya.github.io/.github/profile/index.html" style="background-color: #0366d6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 20px;">Request to Join</a>
 
 </div>

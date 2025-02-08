@@ -1,65 +1,108 @@
-name: Invite to Organization
+name: Organization Join Request
 
 on:
   repository_dispatch:
     types: [join_organization]
+  workflow_dispatch:
+    inputs:
+      username:
+        description: 'GitHub username to approve'
+        required: true
+      email:
+        description: 'User email to approve'
+        required: true
+      action:
+        description: 'Action to take (approve/reject)'
+        required: true
 
 jobs:
-  invite:
+  process_request:
     runs-on: ubuntu-latest
+    if: github.event_name == 'repository_dispatch'
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       - name: Get user information
         id: user-info
         run: |
           echo "::set-output name=username::${{ github.event.client_payload.github_username }}"
           echo "::set-output name=email::${{ github.event.client_payload.email }}"
 
-      - name: Invite user to organization
+      - name: Verify GitHub user
         uses: actions/github-script@v6
+        id: verify-user
         with:
           github-token: ${{ secrets.ADMIN_TOKEN }}
           script: |
-            const username = '${{ steps.user-info.outputs.username }}';
-            const email = '${{ steps.user-info.outputs.email }}';
-            
             try {
-              // Check if user exists
-              await github.rest.users.getByUsername({
-                username: username
-              });
-              
-              // Send organization invitation
-              await github.rest.orgs.createInvitation({
-                org: 'THE-NIS-KENYA',
-                email: email,
-                role: 'direct_member'
-              });
-              
-              console.log(`Successfully invited ${username} to the organization`);
+              const username = '${{ steps.user-info.outputs.username }}';
+              await github.rest.users.getByUsername({ username });
+              return true;
             } catch (error) {
-              console.error(`Error inviting user: ${error.message}`);
-              core.setFailed(error.message);
+              return false;
             }
 
-      - name: Send confirmation email
+      - name: Send admin approval email
+        if: steps.verify-user.outputs.result == 'true'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "Welcome to THE NIS Kenya!"
-          to: ${{ steps.user-info.outputs.email }}
+          subject: "New Join Request - THE NIS Kenya"
+          to: frandelwanjawa19@gmail.com
           from: THE NIS Kenya
           body: |
-            Hello ${{ steps.user-info.outputs.username }},
+            New join request received:
             
-            Thank you for your interest in joining THE NIS Kenya. We have sent you an invitation to join our GitHub organization.
+            GitHub Username: ${{ steps.user-info.outputs.username }}
+            Email: ${{ steps.user-info.outputs.email }}
             
+            To approve this request, click here:
+            https://github.com/THE-NIS-KENYA/.github/actions/workflows/invite-workflow.yml?username=${{ steps.user-info.outputs.username }}&email=${{ steps.user-info.outputs.email }}&action=approve
+            
+            To reject this request, click here:
+            https://github.com/THE-NIS-KENYA/.github/actions/workflows/invite-workflow.yml?username=${{ steps.user-info.outputs.username }}&email=${{ steps.user-info.outputs.email }}&action=reject
+
+  process_approval:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Process approval
+        if: github.event.inputs.action == 'approve'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.ADMIN_TOKEN }}
+          script: |
+            try {
+              // Send organization invitation
+              await github.rest.orgs.createInvitation({
+                org: 'THE-NIS-KENYA',
+                email: '${{ github.event.inputs.email }}',
+                role: 'direct_member'
+              });
+              
+              console.log('Successfully invited user to the organization');
+            } catch (error) {
+              core.setFailed(error.message);
+            }
+
+      - name: Send user notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "${{ github.event.inputs.action == 'approve' && 'Welcome to THE NIS Kenya!' || 'THE NIS Kenya Membership Update' }}"
+          to: ${{ github.event.inputs.email }}
+          from: THE NIS Kenya
+          body: |
+            ${{ github.event.inputs.action == 'approve' && 'Your request to join THE NIS Kenya has been approved! You will receive a GitHub invitation shortly.
+
             Please check your GitHub notifications or email for the invitation link.
-            
+
             Best regards,
-            THE NIS Kenya Team
+            THE NIS Kenya Team' || 'Thank you for your interest in THE NIS Kenya. Unfortunately, we cannot approve your membership request at this time.
+
+            Best regards,
+            THE NIS Kenya Team' }}
