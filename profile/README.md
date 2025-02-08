@@ -4,26 +4,14 @@
 
 ### THE NIS Kenya
 
-</div>
-<div align="center">
-
 <img src="https://democracyinafrica.org/wp-content/uploads/2024/07/Designer.jpeg" alt="Logo of National Integrity Society" width="250"/>
 
+### Scan to Join Our Organization
+
+<div id="qrcode">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://github.com/THE-NIS-KENYA" alt="QR Code to join THE NIS Kenya"/>
 </div>
 
+[Click here to join directly](https://github.com/THE-NIS-KENYA)
 
-<div align="center">
-
-  ###  Join Our Organization
-  
 </div>
-
-
-
-Click the button below to join our organization:
-
-[![Join Now](https://github.com/franfreezy/your-repo/gh-pages/button.png)](https://your-username.github.io/your-repo/)
-
-Scan the QR code to join our organization:
-
-![QR Code](https://github.com/franfreezy/your-repo/gh-pages/qrcode.png)
